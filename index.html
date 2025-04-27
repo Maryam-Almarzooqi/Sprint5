@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deadline Rush</title>
+  </head>
+  <style>
+    :root {
+      --primary-color: #6baed6;
+      --primary-hover: #4a90e2;
+      --background: #1e1e2f;
+      --task-background: #444;
+      --card-background: #2e2e3e;
+      --text-color: #fff;
+      --error-color: #e74c3c;
+    }
+
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--background);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+
+    header {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin: 40px 0 20px;
+      text-align: center;
+    }
+
+
+    .step,
+    #final-step,
+    #reward-step {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+      background: var(--card-background);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+
+
+    .step.active,
+    #final-step.active,
+    #reward-step.active {
+      display: flex;
+    }
+
+
+    select, input, button {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin: 8px 0;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+
+    .theme-button {
+      font-size: 1.6em;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+
+    .todo-item {
+      background: var(--task-background);
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+
+    .remove-btn {
+      background-color: var(--error-color);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+
+    .remove-btn:hover {
+      background-color: #c0392b;
+    }
+
+
+    .error {
+      color: var(--error-color);
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+
+    #progress-container {
+      width: 80%;
+      max-width: 400px;
+      height: 25px;
+      background: #555;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px auto;
+    }
+
+
+    #progress-bar {
+      height: 100%;
+      width: 100%;
+      background: var(--primary-color);
+      transition: width 1s linear;
+    }
+
+
+    #timer {
+      text-align: center;
+      font-size: 1.5em;
+      margin-top: 10px;
+    }
+
+
+    #reward-step h1 {
+      font-size: 2em;
+      margin: 40px 0 20px;
+    }
+
+
+    .step#step-3 button {
+      width: 100%;
+      max-width: 400px;
+      margin: 8px 0;
+    }
+    
+    nav {
+      width: 100%;
+      background: #2e2e3e;
+      padding: 10px 0;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  </style>
+
+<body>
+  <header>🚀 Deadline Rush</header>
+  <nav>
+    <a href="#" onclick="switchTab('home')" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Home</a>
+    <a href="AboutUs.html" target="_blank" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">About Us</a>
+    <a href="WhyThisWorks.html" onclick="switchTab('why')" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Why This Works</a>
+  </nav>
+
+
+  <!-- Step 1 -->
+  <div class="step active" id="step-1">
+    <h2>Step 1: Choose a Theme</h2>
+    <div>
+      <button class="theme-button" onclick="setTheme('light')">🌞 Light</button>
+      <button class="theme-button" onclick="setTheme('dark')">🌙 Dark</button>
+      <button class="theme-button" onclick="setTheme('cool')">❄️ Cool</button>
+    </div>
+    <div class="button-group">
+      <button onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+
+  <!-- Step 2 -->
+  <div class="step" id="step-2">
+    <h2>Step 2: Choose Study Method</h2>
+    <select id="technique" onchange="handleTechniqueChange()">
+      <option value="">-- Select a technique --</option>
+      <option value="freeflow">🧠 Free Flow</option>
+      <option value="pomodoro">⏱️ Pomodoro</option>
+    </select>
+    <input id="set-time-input" type="number" placeholder="Custom time (min)">
+    <div class="error" id="error-step-2"></div>
+    <div class="button-group">
+      <button onclick="prevStep()">Back</button>
+      <button onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+
+  <!-- Step 3 -->
+  <div class="step" id="step-3">
+    <h2>Step 3: Add Tasks</h2>
+    <input id="input-task" type="text" placeholder="📋 Add a task">
+    <button onclick="addTask()">➕ Add Task</button>
+    <div id="todo-list"></div>
+    <div class="error" id="error-step-3"></div>
+    <div class="button-group">
+      <button onclick="prevStep()">⬅️ Back</button>
+      <button onclick="startGame()">▶️ Start</button>
+    </div>
+  </div>
+
+
+  <!-- Timer -->
+  <div id="final-step">
+    <h2><span id="timer-label">⏳ Time Left:</span> <span id="countdown">00:00</span></h2>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+    <h3>Your Tasks</h3>
+    <div id="active-task-list"></div>
+  </div>
+
+
+  <!-- Reward -->
+  <div id="reward-step">
+    <h1>🎉 Reward Time!</h1>
+    <p id="reward-text" style="font-size: 1.5em;"></p>
+    <button onclick="location.reload()">🔁 Start Over</button>
+  </div>
+
+<script src="/script.js"></script>
+
+ </body>
+</html>
