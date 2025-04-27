@@ -1,9 +1,12 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
 const cors = require('cors');
 app.use(cors());
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // Temporary in-memory storage
 let tasks = [];
@@ -61,9 +64,6 @@ app.post('/api/rewardEarned', (req, res) => {
     res.json({ status: 'ok' });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
 
 
