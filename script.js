@@ -5,9 +5,11 @@ let selectedTechnique = '';
 let mainTime = 0;
 
 // Utility to call backend
+const BASE_URL = 'https://sprint5testing-byb0c9efeyhxd6g9.uaenorth-01.azurewebsites.net';
+
 async function postToBackend(endpoint, data) {
     try {
-        const response = await fetch(endpoint, {
+        const response = await fetch(`${BASE_URL}${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
